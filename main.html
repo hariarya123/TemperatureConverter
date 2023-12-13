@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: Verdana, Geneva, Tahoma, sans-serif;
+    }
+
+    .background-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -2;
+      object-position: center bottom; 
+    }
+
+    .container {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: transparent; 
+      overflow: hidden; 
+    }
+
+    .container h1 {
+      color: rgb(7, 8, 7);
+      font-weight: 700;
+      font-size: 25px;
+      text-align: center;
+    }
+
+    .converter-row {
+      display: flex;
+      width: 40%;
+      justify-content: space-between;
+      align-items: center;
+      background: rgb(187, 4, 187);
+      border-radius: 10px;
+      padding: 50px 20px;
+    }
+
+    .col {
+      flex-basis: 32%;
+      text-align: center;
+    }
+
+    .col label {
+      font-size: 15px;
+      font-weight: 500;
+      margin-bottom: 10px;
+      color: #fff;
+    }
+
+    .col input {
+      width: 150px;
+      height: 30px;
+      background: white;
+      border-radius: 5px;
+      text-align: center;
+    }
+
+    #result {
+      margin-top: 20px;
+      color: #fff;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 10px;
+      background-color: #07dc47;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    select {
+      margin-top: 10px;
+      padding: 8px;
+      font-size: 16px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+
+<body>
+ 
+  <video class="background-video" autoplay loop style="position: absolute;">
+    <source src="first.mp4" type="video/mp4">
+  </video>
+
+  <video class="background-video" autoplay loop style="position: absolute;">
+    <source src="second.mp4" type="video/mp4">
+  </video>
+
+  <video class="background-video" autoplay loop style="position: absolute;">
+    <source src="third.mp4" type="video/mp4">
+  </video>
+
+  <div class="container">
+    <h1> <br> Temperature Converter</h1>
+    <div class="converter-row">
+      <div class="col">
+        <label>Fahrenheit</label>
+        <input type="number" id="fahrenheit">
+      </div>
+
+      <div class="col">
+        <label>Celsius</label>
+        <input type="number" id="celsius">
+      </div>
+
+      <div class="col">
+        <label>Kelvin</label>
+        <input type="number" id="kelvin">
+      </div>
+    </div>
+
+    <label for="unit">Select unit: </label>
+    <select id="unit">
+      <option value="celsius">Celsius</option>
+      <option value="fahrenheit">Fahrenheit</option>
+      <option value="kelvin">Kelvin</option>
+    </select>
+
+    <button onclick="convertTemperature()">Convert</button>
+
+    <div id="result"></div>
+  </div>
+
+  <script>
+    function convertTemperature() {
+        let celsius = document.getElementById('celsius');
+        let fahrenheit = document.getElementById('fahrenheit');
+        let kelvin = document.getElementById('kelvin');
+        let unitSelector = document.getElementById('unit');
+        let selectedUnit = unitSelector.value;
+        let resultContainer = document.getElementById('result');
+        let videos = document.querySelectorAll('.background-video');
+      
+       
+        videos.forEach(video => video.style.display = 'none');
+      
+        if (selectedUnit === 'celsius') {
+          let c = parseFloat(celsius.value);
+          let f = (c * 9) / 5 + 32;
+          let k = c + 273.15;
+      
+          fahrenheit.value = parseFloat(f.toFixed(2));
+          kelvin.value = parseFloat(k.toFixed(2));
+          resultContainer.innerText = `Converted Temperature: ${c.toFixed(2)} Celsius`;
+      
+        
+          if (c > 30) {
+            videos[2].style.display = 'block';
+          } else if (c >= 10 && c <= 30) {
+            videos[1].style.display = 'block';
+          } else {
+            videos[0].style.display = 'block'; 
+          }
+        } else if (selectedUnit === 'fahrenheit') {
+          let f = parseFloat(fahrenheit.value);
+          let c = ((f - 32) * 5) / 9;
+          let k = (f - 32) * (5 / 9) + 273.15;
+      
+          celsius.value = parseFloat(c.toFixed(2));
+          kelvin.value = parseFloat(k.toFixed(2));
+          resultContainer.innerText = `Converted Temperature: ${f.toFixed(2)} Fahrenheit`;
+      
+      
+          if (c > 30) {
+            videos[2].style.display = 'block'; 
+          } else if (c >= 10 && c <= 30) {
+            videos[1].style.display = 'block'; 
+          } else {
+            videos[0].style.display = 'block'; 
+          }
+        } else if (selectedUnit === 'kelvin') {
+          let k = parseFloat(kelvin.value);
+          let c = k - 273.15;
+          let f = (k - 273.15) * (9 / 5) + 32;
+      
+          celsius.value = parseFloat(c.toFixed(2));
+          fahrenheit.value = parseFloat(f.toFixed(2));
+          resultContainer.innerText = `Converted Temperature: ${k.toFixed(2)} Kelvin`;
+      
+         
+          if (c > 30) {
+            videos[2].style.display = 'block'; 
+          } else if (c >= 10 && c <= 30) {
+            videos[1].style.display = 'block';
+          } else {
+            videos[0].style.display = 'block'; 
+          }
+        }
+      }
+      
+  </script>
+</body>
+
+</html>
